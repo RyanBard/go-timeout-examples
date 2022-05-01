@@ -16,9 +16,11 @@ time go run caller1-time-after.go
 
 ```
 time go run caller2-context-with-timeout.go 
+```
 
 ```
 time go run caller3-waitgroup.go 
+```
 
 ```
 time go run caller4-http-req-with-context.go
