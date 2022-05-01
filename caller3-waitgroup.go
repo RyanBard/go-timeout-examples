@@ -9,9 +9,7 @@ import (
 	"time"
 )
 
-func httpGet(parentCtx context.Context, wg *sync.WaitGroup, url string) (string, error) {
-	defer wg.Done()
-
+func httpGet(parentCtx context.Context, url string) (string, error) {
 	resChan := make(chan string)
 	errChan := make(chan error)
 
@@ -52,12 +50,12 @@ func httpGet(parentCtx context.Context, wg *sync.WaitGroup, url string) (string,
 	}
 }
 
-func foo(ctx context.Context, wg *sync.WaitGroup) (string, error) {
-	return httpGet(ctx, wg, "http://localhost:8080/foo")
+func foo(ctx context.Context) (string, error) {
+	return httpGet(ctx, "http://localhost:8080/foo")
 }
 
-func bar(ctx context.Context, wg *sync.WaitGroup) (string, error) {
-	return httpGet(ctx, wg, "http://localhost:8080/bar")
+func bar(ctx context.Context) (string, error) {
+	return httpGet(ctx, "http://localhost:8080/bar")
 }
 
 // https://gobyexample.com/
@@ -72,14 +70,16 @@ func main() {
 	var fooErr error
 	wg.Add(1)
 	go func() {
-		fooRes, fooErr = foo(ctx, &wg)
+		fooRes, fooErr = foo(ctx)
+		wg.Done()
 	}()
 
 	var barRes string
 	var barErr error
 	wg.Add(1)
 	go func() {
-		barRes, barErr = bar(ctx, &wg)
+		barRes, barErr = bar(ctx)
+		wg.Done()
 	}()
 
 	wg.Wait()
