@@ -111,16 +111,16 @@ func main() {
 	var fooRes int
 	var fooErr error
 	go func() {
+		defer wg.Done()
 		fooRes, fooErr = fooSvc.DoWork(ctx)
-		wg.Done()
 	}()
 
 	wg.Add(1)
 	var barRes string
 	var barErr error
 	go func() {
+		defer wg.Done()
 		barRes, barErr = barSvc.DoWork(ctx)
-		wg.Done()
 	}()
 
 	wg.Wait()

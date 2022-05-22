@@ -70,16 +70,16 @@ func main() {
 	var fooErr error
 	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		fooRes, fooErr = foo(ctx)
-		wg.Done()
 	}()
 
 	var barRes string
 	var barErr error
 	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		barRes, barErr = bar(ctx)
-		wg.Done()
 	}()
 
 	wg.Wait()
